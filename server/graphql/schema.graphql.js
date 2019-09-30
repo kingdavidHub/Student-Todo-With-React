@@ -10,18 +10,9 @@ const {
     GraphQLObjectType,
     GraphQLString,
     GraphQLID,
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull
 } = graphql;
-
-// * Dummy User 
-const user = [
-    { id: "1", name: "Kingdavid Igbayilola", username: "kingdavid", courseStudying: "Computer Science" }
-];
-
-const courses = [
-    {id: "1", subject: "FSF 1", userId: "1", date: "25-04-19"}
-];
-
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -65,14 +56,14 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         user: {
             type: UserType,
-            args: { id: { type: GraphQLID} },
+            args: { id: { type: new GraphQLNonNull(GraphQLID)  } },
             resolve: (parent, args) => {
                 return User.findById(args.id);
             }
         },
         course: {
             type: CourseType,
-            args: { id: { type: GraphQLID } },
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve: (parent, args) => {
                 return Course.findById(args.id);
             }
@@ -98,9 +89,9 @@ const Mutation = new GraphQLObjectType({
         addUser: {
             type: UserType,
             args: {
-                name: { type: GraphQLString },
-                username: { type: GraphQLString },
-                courseStudying: { type: GraphQLString },
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                username: { type: new GraphQLNonNull(GraphQLString) },
+                courseStudying: { type: new GraphQLNonNull(GraphQLString) },
             },
             resolve: (parent, args) => {
                 let user = new User({
@@ -115,11 +106,11 @@ const Mutation = new GraphQLObjectType({
         addCourse: {
             type: CourseType,
             args: {
-                subject: { type: GraphQLString },
-                userId: { type: GraphQLID },
+                subject: { type: new GraphQLNonNull(GraphQLString) },
+                userId: { type: new GraphQLNonNull(GraphQLID) },
                 },
                 resolve: (parent, args) => {
-                    let course = new Courses({
+                    let course = new Course({
                         subject: args.subject,
                         userId: args.userId,
                         date: new Date().toISOString()

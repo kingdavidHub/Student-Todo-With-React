@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const graphqlHTTP = require('express-graphql');
 const schema = require('./graphql/schema.graphql');
 require('dotenv').config();
@@ -22,9 +23,9 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }));
 
+app.use(cors());
 
 // * create server
-
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}!`);
 });
