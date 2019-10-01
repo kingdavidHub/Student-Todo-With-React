@@ -21,6 +21,8 @@ const UserType = new GraphQLObjectType({
         name: { type: GraphQLString },
         username: { type: GraphQLString },
         courseStudying: { type: GraphQLString },
+        createdAt: { type: GraphQLString },
+        updatedAt: { type: GraphQLString },
         courses: {  // * Graphqllist returns all list
             type: new GraphQLList(CourseType),
             resolve: (parent, args) => {

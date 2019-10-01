@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
+import { compose } from 'recompose';
+import { graphql } from 'react-apollo';
+
+// * imort queries
+import { createUserQuery  } from "../graphql/queries";
 
 class CreateUser extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             name: '',
             username: '',
@@ -31,20 +37,32 @@ class CreateUser extends Component {
 
     onSubmit = e => {
         e.preventDefault();
+        this.props.createUserQuery({
+            variables: {
+                name: this.state.name,
+                username: this.state.username,
+                courseStudying: this.state.courseStudying
+            }
+        });
 
-        console.log(this.state);
+        this.setState({
+            name: '',
+            username: '',
+            courseStudying: ''
+        });
+
     }
 
 
     render() {
         return (
             <React.Fragment>
-                <div className="container" >
-                    <h3 style={{textAlign: 'center', margin: '20px 20px'}} >Create User</h3>
-                    <form onSubmit={this.onSubmit} >
+                <div className="container">
+                    <h3 style={{ textAlign: 'center', margin: '20px 20px' }} >Create User</h3>
+                    <form onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label>Name</label>
-                            <input  
+                            <input
                                 type="text"
                                 required
                                 value={this.state.name}
@@ -55,7 +73,7 @@ class CreateUser extends Component {
 
                         <div className="form-group">
                             <label>Username</label>
-                            <input  
+                            <input
                                 type="text"
                                 required
                                 value={this.state.username}
@@ -64,10 +82,10 @@ class CreateUser extends Component {
                                 placeholder="Username" />
                         </div>
 
-                        
+
                         <div className="form-group">
                             <label>Course Studying</label>
-                            <input  
+                            <input
                                 type="text"
                                 required
                                 value={this.state.courseStudying}
@@ -82,15 +100,16 @@ class CreateUser extends Component {
                                 type="submit"
                                 onSubmit={this.onSubmit}
                                 style={{ margin: "10px 0px" }}>
-                            Submit
+                                Submit
                             </button>
                         </div>
-
-                    </form>
+                    </form >
                 </div>
             </React.Fragment>
         )
     }
 }
 
-export default CreateUser;
+export default compose(
+    graphql(createUserQuery, { name: "createUserQuery"}),
+)(CreateUser);

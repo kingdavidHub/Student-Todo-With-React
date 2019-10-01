@@ -8,6 +8,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+app.use(cors());
+
 // * conecting to the mongodb local database
 mongoose.connect('mongodb://localhost:27017/student-todo-db', {useNewUrlParser: true, useCreateIndex: true})
     .then(() => {
@@ -23,7 +25,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }));
 
-app.use(cors());
 
 // * create server
 app.listen(PORT, () => {
